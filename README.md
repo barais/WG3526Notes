@@ -110,10 +110,10 @@ make -j1 V=s
 If there is some questions, please answer the missing configuration part. 
 Next, take a big big coffee. When it finishes. 
 
-Copy the target/ramips/... into your host. 
+Copy the bin/targets/ramips/mt7621/*.bin into your host. 
 
 ```bash
-scp target/ramips/.. user@172.17.0.1:~
+scp bin/targets/ramips/mt7621/*.bin user@172.17.0.1:~
 ```
 
 ## Flash the router
