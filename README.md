@@ -7,7 +7,7 @@ First you need a docker image for crosscompiling lede firmware. I prepare one.
 You can get in in doing 
 
 ```bash
-docker pull barais/ledeWG3526
+docker pull barais/lede
 ```
 
 Or you can build it.  The docker file is the following:
@@ -28,13 +28,13 @@ CMD /bin/bash
 You can build this image in creating a text file nammed Dockerfile. Put the following context and call the command
 
  ```bash
- docker docker build -t barais/ledeWG3526 .
+ docker docker build -t barais/lede .
 ```
 
 Next run the following command 
 
 ```bash
-docker run -ti barais/ledeWG3526 /bin/bash
+docker run -ti barais/lede /bin/bash
 ```
 
 ## Creating a new firmware
