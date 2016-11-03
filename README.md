@@ -206,10 +206,10 @@ Next you can do an update and install npm
 
 ```bash
 npm update -g npm. 
-npm install -g grunt
-npm install -g grunt-cli
-npm install -g bower
-npm install -g generator-kevoree
+npm i -g grunt-cli
+npm i -g bower
+npm i -g generator-kevoree
+npm i -g kevoree-cli
 ```
 
 ## Install Kevoree NodeJS Runtime
@@ -217,14 +217,14 @@ npm install -g generator-kevoree
 Prefer a global install for this module as it is intended to be used that way:
 
 ```bash
-npm i -g kevoree-nodejs-runtime
+npm i -g kevoree-cli
 ```
 
 
 This will allow you to start a new Kevoree JavaScript runtime from the command-line by using:
 
 ```bash
-$ kevoreejs
+$ kevoree
 ```
 
 ### Usage
