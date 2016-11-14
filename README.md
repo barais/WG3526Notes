@@ -21,7 +21,7 @@ RUN mv /opt/source /opt/lede
 RUN cd /opt/lede
 RUN ./scripts/feeds update -a
 RUN ./scripts/feeds install -a
-WORKDIR /opt
+WORKDIR /opt/lede
 CMD /bin/bash
 ```
 
@@ -35,17 +35,40 @@ Next run the following command
 
 ```bash
 docker run -ti barais/lede /bin/bash
+#if you take my image
+cd /opt/source
+#if you build your image
+cd /opt/lede
 ```
 
 ## Creating a new firmware
 
 ```bash
+cd /opt/source
 make menuconfig
 #select the correct devices. 
 #Select the package you need. You need at least nodejs and blockmount.  
 ```
 
-Next configrue the kernel 
+In particular, you need to remove support for /etc/fstab in 
+
+```txt
+base system -> busybox -> custom busy box options -> Linux System Utilities -> Mount -> Support fstab and -a
+```
+
+You need also to include mount-utils
+
+```txt
+ > Utilities -> mount-utils................................... related (u)mount utilities 
+```
+
+and 
+
+```txt
+> Utilities -> Disc  blkid........................... locate and print block device attribute
+```
+
+Next configure the kernel 
 
 ```bash
 FORCE_UNSAFE_CONFIGURE=1 make kernel_menuconfig  -j1 V=s 
