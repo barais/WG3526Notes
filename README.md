@@ -270,3 +270,105 @@ Enjoy
 Follow the [tutorial ](https://github.com/netbeast/docs/wiki/Cross-Compile-NPM-modules) to crosscompule some npm modules.
 
 
+
+## Openzwave
+
+in your cross-compile docker container.
+
+go to /opt/source
+
+```bash
+cd /opt/source
+
+cd packages/libs
+git clone https://github.com/cabal/openwrt
+cd openwrt
+mv openzwave ..
+cd ..
+rm -rf openwrt
+cd ../..
+make package/libs/openzwave/compile V=s
+cd dl
+wget http://old.openzwave.com/downloads/openzwave-1.2.919.tar.gz
+cd ..
+make menuconfig
+
+#in libraries select now openzwave as module to get an ipkg
+make -j1 V=s
+
+```
+
+in /opt/source/bin/targets/ramips/mt7621/packages
+you will get a file named
+openzwave_1.2.919-1_mipsel_24kc.ipk
+
+just copy it on the router and install it. 
+
+next you have to cross-compile [openzwave-shared](https://github.com/OpenZWave/node-openzwave-shared)
+
+It is not so easy to compile it. 
+
+You have to clone the openzwave-shared in your container. 
+
+Next you can patch the binding.gyp
+
+The linux part should be something like that. 
+
+```txt
+
+	["OS=='linux'", {
+				"variables": {
+					"OZW_LIB_PATH"    : "/opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/openzwave-1.2.919/",
+					"OZW_INC"         : "/opt/source/dl/openzwave-1.2.919/cpp/src/",
+				},
+        		"defines": [
+					"OPENZWAVE_ETC=/usr/local/etc/openzwave",
+					"OPENZWAVE_DOC=/usr/local/share/doc/openzwave",
+					"OPENZWAVE_SECURITY=0"
+        		],
+				"link_settings": {
+					"libraries": ["-lopenzwave"]
+				},
+				"include_dirs": [
+					"<!(node -p -e \"require('path').dirname(require.resolve('nan'))\")",
+					"<(OZW_INC)",
+					"<(OZW_INC)/value_classes"
+				],
+				"cflags": [ "-Wno-ignored-qualifiers -Wno-write-strings -Wno-unknown-pragmas" ],
+			}],
+
+
+
+```
+
+Next set the following envs variable
+
+```bash
+export CC=/opt/source/staging_dir/toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/bin/mipsel-openwrt-linux-gcc
+export CXX=/opt/source/staging_dir/toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/bin/mipsel-openwrt-linux-g++
+export STAGING_DIR=/opt/source/staging_dir
+export PKG_CONFIG_PATH=/opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/openzwave-1.2.919
+export npm_config_arch=mips
+# path to the node source that was used to create the cross-compiled version
+export npm_config_nodedir=/opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/node-v4.4.5/
+```
+
+Please install nodejs in version 4.4.5 in your docker container. You can do it using nvm. 
+
+
+next install the module
+
+```bash
+npm i -g node-gyp
+```
+
+in the folder where you clone node-openzwave-shared
+
+```bash
+npm install --unsafe-perm
+```
+
+next put the resulting folder in a node_modules and copy it to your global npm folder on the router. 
+
+Great, we can do a kevoree component that use this library. 
+
