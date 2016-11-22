@@ -225,6 +225,37 @@ Reboot the router
 Verify that the partitions were mounted properly:
 Next you can configure your router to be sure it is connected to internet. 
 
+
+## Adding new packages
+
+Just edit the file /etc/opkg/customfeeds.conf
+
+```bash
+vi /etc/opkg/customfeeds.conf
+```
+
+add the following line
+
+```txt
+src/gz newpackage http://downloads.lede-project.org/snapshots/packages/mipsel_24kc/packages/
+```
+
+next
+
+```bash
+opkg update
+#to install node
+opkg install node
+#to install nano
+opkg install node
+#to install mosquitto
+opkg install mosquitto
+
+```
+
+## Install KevoreeJS
+
+
 Next you can do an update and install npm
 
 ```bash
@@ -270,32 +301,6 @@ Enjoy
 Follow the [tutorial ](https://github.com/netbeast/docs/wiki/Cross-Compile-NPM-modules) to crosscompule some npm modules.
 
 
-## Adding new packages
-
-Just edit the file /etc/opkg/customfeeds.conf
-
-```bash
-vi /etc/opkg/customfeeds.conf
-```
-
-add the following line
-
-```txt
-src/gz newpackage http://downloads.lede-project.org/snapshots/packages/mipsel_24kc/packages/
-```
-
-next
-
-```bash
-opkg update
-#to install node
-opkg install node
-#to install nano
-opkg install node
-#to install mosquitto
-opkg install mosquitto
-
-```
 
 
 ## Openzwave
