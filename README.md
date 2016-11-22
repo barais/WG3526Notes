@@ -121,9 +121,39 @@ USB Serial Converter support  --->
     <*> USB Serial Converter support
     <*> USB Prolific 2303 Single Port Serial Driver (NEW)
 
+## In most cases enabling RFCOMM, HIDP, HCI USB and/or HCI UART should be sufficient.
+
+## It is also a good idea to enable the UHID (Userspace Human Interface Device) driver for Bluetooth input devices such as keyboards and mice.
+
+## Tallying up the options: CONFIG_BT, BT_BREDR, CONFIG_BT_RFCOMM, CONFIG_BT_HIDP, BT_LE, CONFIG_BT_HCIBTUSB, CONFIG_BT_HCIUART, CONFIG_RFKILL, CONFIG_UHID
+
+KERNEL Enable bluetooth support
+[*] Networking support --->
+      <*>   Bluetooth subsystem support --->
+              [*]   Bluetooth Classic (BR/EDR) features
+              <*>     RFCOMM protocol support
+              [ ]       RFCOMM TTY support
+              < >     BNEP protocol support
+              [ ]       Multicast filter support
+              [ ]       Protocol filter support
+              <*>     HIDP protocol support
+              [*]     Bluetooth High Speed (HS) features
+              [*]   Bluetooth Low Energy (LE) features
+                    Bluetooth device drivers --->
+                      <*> HCI USB driver
+                      <*> HCI UART driver
+      <*>   RF switch subsystem support --->
+    Device Drivers --->
+          HID support --->
+            <*>   User-space I/O driver support for HID subsystem
+
 ```
 
-Do no forget to check in the config file that is unselected. There is a bug with sscard reader; See [https://dev.openwrt.org/changeset/49131](https://dev.openwrt.org/changeset/49131)
+
+Do no forget to check in the config file that is unselected. There is a bug with sdcard reader; See [https://dev.openwrt.org/changeset/49131](https://dev.openwrt.org/changeset/49131)
+
+You have also to include the following packages: bluez-libs bluez-utils usbutils.
+
 
 When you are happy with your current configuration, you can build the firmware. 
 
