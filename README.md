@@ -275,9 +275,13 @@ next
 ```bash
 opkg update
 #to install node
-opkg install node
+opkg install wget
+opkg install git
+#Download the following file https://github.com/barais/WG3526Notes/blob/master/node_v4.4.5-1_mipsel_24kc.ipk?raw=true
+# copy it on the router and next
+opkg install --force-checksum node_v4.4.5-1_mipsel_24kc.ipk 
 #to install nano
-opkg install node
+opkg install nano
 #to install mosquitto
 opkg install mosquitto
 
