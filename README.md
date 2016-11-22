@@ -20,7 +20,7 @@ RUN git clone https://github.com/lede-project/source
 RUN mv /opt/source /opt/lede
 RUN cd /opt/lede
 RUN ./scripts/feeds update -a
-RUN ./scripts/feeds install -a
+RUN ./scripts/feeds install -a	
 WORKDIR /opt/lede
 CMD /bin/bash
 ```
@@ -269,6 +269,33 @@ Enjoy
 ## Cross compiling node modules
 Follow the [tutorial ](https://github.com/netbeast/docs/wiki/Cross-Compile-NPM-modules) to crosscompule some npm modules.
 
+
+## Adding new packages
+
+Just edit the file /etc/opkg/customfeeds.conf
+
+```bash
+vi /etc/opkg/customfeeds.conf
+```
+
+add the following line
+
+```txt
+src/gz newpackage http://downloads.lede-project.org/snapshots/packages/mipsel_24kc/packages/
+```
+
+next
+
+```bash
+opkg update
+#to install node
+opkg install node
+#to install nano
+opkg install node
+#to install mosquitto
+opkg install mosquitto
+
+```
 
 
 ## Openzwave
