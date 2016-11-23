@@ -466,5 +466,76 @@ tar -czf node-noble.tgz
 mv node_modules/* /usr/lib/node_modules
 ```
 
+Just for information, to create this node_modules, I had to cross-compile the node-usb.
+
+```bash
+git clone --recursive https://github.com/nonolith/node-usb.git
+cd node-usb
+npm i
+```
+
+next edit the binding.gyp file. 
+
+```txt
+--     'use_system_libusb%': 'false',
+++   'use_system_libusb%': 'true',
+
+-- ['use_system_libusb=="true"', {
+--            'include_dirs+': [
+--              '<!@(pkg-config libusb-1.0 --cflags-only-I | sed s/-I//g)'
+--            ],
+--            'libraries': [
+--              '<!@(pkg-config libusb-1.0 --libs)'
+--            ],
+--          }],
+
+++['use_system_libusb=="true"', {
+++            'include_dirs+': [
+++              '/opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/libusb-1.0.20/libusb/','/opt/source/staging_dir/target-mipsel_24kc_musl-1.1.15/usr/include/'
+++            ],
+++            'libraries': [
+++              '-lusb-1.0'
+++            ],
+++          }],
+```
+
+```bash
+#link the libusb library
+ln -s /opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/libusb-1.0.20/ipkg-install/usr/lib/libusb-1.0.so /opt/source/staging_dir/toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/mipsel-openwrt-linux-musl/bin/../../../toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/lib/
+
+#chck if ld can find it
+/opt/source/staging_dir/toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/lib/gcc/mipsel-openwrt-linux-musl/5.4.0/../../../../mipsel-openwrt-linux-musl/bin/ld -lusb-1.0 --verbose
+
+
+#Compile node-usb
+export CC=/opt/source/staging_dir/toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/bin/mipsel-openwrt-linux-gcc
+export CXX=/opt/source/staging_dir/toolchain-mipsel_24kc_gcc-5.4.0_musl-1.1.15/bin/mipsel-openwrt-linux-g++
+export STAGING_DIR=/opt/source/staging_dir
+export PKG_CONFIG_PATH=/opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/openzwave-1.2.919
+export npm_config_arch=mips
+# path to the node source that was used to create the cross-compiled version
+export npm_config_nodedir=/opt/source/build_dir/target-mipsel_24kc_musl-1.1.15/node-v4.4.5/
+npm  install --unsafe-perm
+
+
+#prepare the package
+rm -rf .git
+cd ..
+mv node-usb usb
+mkdir test
+cd test
+mkdir node_modules
+mv ../usb node_modules
+mv node_modules/usb/node_modules/* node_modules
+npm i bleno 
+npm i noble
+ 
+#Great it works you can zip the test folder. 
+```
+
+
+
+ 
+
 
 
