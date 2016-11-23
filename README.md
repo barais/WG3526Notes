@@ -443,3 +443,28 @@ next put the resulting folder in a node_modules and copy it to your global npm f
 
 Great, we can do a kevoree component that use this library. 
 
+## node-usb, noble, bleno
+
+I just prepare the pre-compiled libraries for noble and bleno. 
+
+You have to install  the [libusb ipk](https://github.com/barais/WG3526Notes/blob/master/libusb-1.0_1.0.20-1_mipsel_24kc.ipk) which is in this github repository. 
+Copy it on the router, copy also the [node-noble.tgz](https://github.com/barais/WG3526Notes/blob/master/node-noble.tgz) on the router. 
+
+Install the libusb-1.0_1.0.20-1_mipsel_24kc.ipk file.
+
+```bash
+opkg install --force-checksum libusb-1.0_1.0.20-1_mipsel_24kc.ipk 
+```
+
+next uncompress the node-noble.tgz in /root
+and copy all the content of the node_module foler in /usr/lib/node_modules
+
+```bash
+cd ~
+rm -rf node_modules
+tar -czf node-noble.tgz
+mv node_modules/* /usr/lib/node_modules
+```
+
+
+
