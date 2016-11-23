@@ -368,7 +368,12 @@ in /opt/source/bin/targets/ramips/mt7621/packages
 you will get a file named
 openzwave_1.2.919-1_mipsel_24kc.ipk
 
-just copy it on the router and install it. 
+just copy it and copy the libudev* on the router and install it. 
+
+```bash
+opk install  libudev_3.2-1_mipsel_24kc.ipk --force-checksum
+opkg install openzwave_1.2.919-1_mipsel_24kc.ipk  --force-checksum --force-depends
+```
 
 next you have to cross-compile [openzwave-shared](https://github.com/OpenZWave/node-openzwave-shared)
 
